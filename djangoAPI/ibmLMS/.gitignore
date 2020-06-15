@@ -1,0 +1,13 @@
+
+#ide files
+/.idea
+
+
+
+#virual enviornment
+/venv
+
+.env
+
+/.idea/
+/.env
