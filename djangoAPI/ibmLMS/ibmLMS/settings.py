@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from django.utils.crypto import get_random_string
+from django.core.management.utils import get_random_secret_key
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = get_random_secret_key()
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'ibmUsers.apps.IbmusersConfig',
     'rest_framework.authtoken',
     'djoser',
+    'courses.apps.CoursesConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -83,6 +85,16 @@ WSGI_APPLICATION = 'ibmLMS.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    'default':{
+        'ENGINE': 'djongo',
+        'NAME': config('DB_NAME'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'USER': config('DB_OWNER')
+    }
+}
+
+"""
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': config('DB_NAME'),
@@ -91,7 +103,7 @@ DATABASES = {
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
     }
-}
+"""
 
 
 
@@ -149,3 +161,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

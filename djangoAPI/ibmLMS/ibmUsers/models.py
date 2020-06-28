@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser
-from django.db import models
+from djongo import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
@@ -53,8 +53,34 @@ class User(AbstractBaseUser , PermissionsMixin):
     def get_last_active(self):
         return self.last_active
 
+    def get_token(self):
+        return Token.objects.get(user=self)
+
+    def get_is_teacher(self):
+        return self.is_teacher
+
+    def get_is_admin(self):
+        return self.is_school_admin
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+@receiver(post_save , sender=settings.AUTH_USER_MODEL)
+def determine_user_type(sender , instance=None , created=False , **kwargs):
+    if created:
+        if instance.get_is_teacher:
+            Teacher.objects.create(user=instance)
+        else:
+            Student.objects.create(user=instance)
+
+
+class Student(models.Model):
+    user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
+
+
+class Teacher(models.Model):
+    user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
