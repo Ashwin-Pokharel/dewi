@@ -1,6 +1,8 @@
 from abc import ABCMeta
 
 from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files.uploadedfile import InMemoryUploadedFile , TemporaryUploadedFile
 from django.core.files.storage import Storage
 from . import settings
 from decouple import config as envconfig
@@ -11,41 +13,59 @@ from django.utils.deconstruct import deconstructible
 from django.core.management.utils import get_random_string
 
 
+def transform(content):
+    if type(content) == TemporaryUploadedFile:
+        return content
+    temp_file = NamedTemporaryFile(delete=False)
+    for block in content.chunks():
+        # If no more file then stop
+        if not block:
+            break
+        # Write image block to temporary file
+        temp_file.write(block)
+
+    temp_file.flush()
+    return temp_file
+
+
 @deconstructible
 class IbmStorage(Storage):
     cos = None
 
     def __init__(self, option=None):
-        super()
+        super();
         if not option:
             option = settings.DEFAULT_FILE_STORAGE
         self.cos = ibm_boto3.client(
-            "s3"
+            "s3",
+            ibm_api_key_id=envconfig('COS_API_KEY_ID'),
+            ibm_service_instance_id=envconfig('COS_INSTANCE_CRN'),
+            config=Config(signature_version='oauth'),
+            endpoint_url=envconfig('COS_ENDPOINT'),
         )
 
     def _save(self, name, content):
         try:
-            if hasattr(content, 'temporary_file_path'):
-                with open(content.temporary_file_path(), "rb") as f:
-                    self.cos.upload_fileobj(f, envconfig("COS_BUCKET_IBM"), name)
-            else:
-                raise FileNotFoundError
+            new_file = transform(content)
+            print(new_file.name)
+            with open(new_file.name, "rb") as f:
+                self.cos.upload_fileobj(f, envconfig("COS_BUCKET_IBM"), name)
+            new_file.close()
         except FileNotFoundError:
-            print("File error")
             raise FileNotFoundError
         except Exception as e:
             print(Exception, e)
             raise Exception
 
     def _open(self, name, mode="rb"):
-        return File(open(name, mode))
+        return File(name)
 
     def path(self, name):
         raise NotImplementedError("not available ")
 
     def exists(self, name):
         try:
-            self.cos.head_object(Bucket=envconfig("COS_BUCKET_IBM"), Key=name)
+            self.cos.get_object(Bucket=envconfig("COS_BUCKET_IBM"), Key=name)
             return True
         except ClientError as e:
             if e.response['Error']['Code'] == "404":
@@ -67,7 +87,7 @@ class IbmStorage(Storage):
         if not self.exists(name):
             return name
         else:
-            return get_random_string(7)
+            return name + get_random_string(7)
 
     def listdir(self, path):
         raise NotImplementedError
