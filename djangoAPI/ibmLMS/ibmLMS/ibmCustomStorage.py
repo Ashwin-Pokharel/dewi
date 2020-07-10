@@ -57,8 +57,12 @@ class IbmStorage(Storage):
             print(Exception, e)
             raise Exception
 
+
     def _open(self, name, mode="rb"):
         return File(name)
+
+    def url(self):
+        raise NotImplementedError
 
     def path(self, name):
         raise NotImplementedError("not available ")
