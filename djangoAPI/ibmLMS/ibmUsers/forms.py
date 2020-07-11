@@ -4,9 +4,9 @@ from django import forms
 
 
 class UserCreation(UserCreationForm):
-
     password1 = forms.CharField(label="Password" , widget=forms.PasswordInput)
     password2 = forms.CharField(label="Password Confirmation", widget=forms.PasswordInput)
+
     class Meta(UserCreationForm):
         model = User
         fields = ('email' , 'first_name' , 'last_name' , 'phone_number'  , 'is_teacher' , 'is_staff')
