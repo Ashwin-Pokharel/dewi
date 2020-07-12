@@ -9,35 +9,25 @@ import React, {Component, Fragment} from "react";
  } from 'react-native';
 
  import Logo from '../components/Logo';
- import LoginForm from '../components/LoginForm';
+ import SignUpForm from '../components/SignUpForm';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Actions } from 'react-native-router-flux';
-import { AsyncStorage } from 'react-native';
-
 
  
-
-
- export default class LoginScreen extends React.Component<{}>{
-
-  
-
-
-    signup(){
-      Actions.SU()
-    }
-
+ export default class SignUp extends React.Component<{}>{
+  signin(){
+    Actions.LI()
+  }
    render(){
      return(
        <View style = {styles.container}>
          <Logo/>
-         <LoginForm type = "Login"/>
+         <SignUpForm type = "Sign Up"/>
          <View style = {styles.signupTextCont}>
-            <Text style = {styles.signupText}> Don't have an account yet?</Text>
-            <TouchableOpacity onPress={
-              this.signup}>
-              <Text style = {styles.signupButton}> Sign Up</Text>
-              </TouchableOpacity>
+            <Text style = {styles.signupText}> Already have an account?</Text>
+           <TouchableOpacity onPress = {this.signin}> 
+              <Text style = {styles.signupButton}> Sign up</Text>
+           </TouchableOpacity>
          </View>
        </View> 
      )
