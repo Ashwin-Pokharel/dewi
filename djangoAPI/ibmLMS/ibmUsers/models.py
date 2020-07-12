@@ -34,7 +34,6 @@ class User(AbstractBaseUser , PermissionsMixin):
 
     def __str__(self):
         return self.first_name + ' '+ self.last_name
-    
 
     def get_email(self):
         return self.email
@@ -86,7 +85,7 @@ class Student(models.Model):
     user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'Student({0})'.format(str(user))
+        return 'Student({0})'.format(str(self.user))
     
 
 
@@ -94,7 +93,7 @@ class Teacher(models.Model):
     user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'Teacher({0})'.format(str(user))
+        return 'Teacher({0})'.format(str(self.user))
 
     
 
