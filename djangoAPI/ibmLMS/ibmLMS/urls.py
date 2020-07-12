@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path , include
 from django.conf.urls import url
 import ibmUsers.urls
+import courses.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^' , include(ibmUsers.urls) , name='login')
+    url(r'^', include(ibmUsers.urls) , name='login'),
+    url(r'^courses', include(courses.urls) , name='courses')
 
 ]

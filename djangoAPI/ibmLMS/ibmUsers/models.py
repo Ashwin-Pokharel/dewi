@@ -32,6 +32,10 @@ class User(AbstractBaseUser , PermissionsMixin):
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
+    def __str__(self):
+        return self.first_name + ' '+ self.last_name
+    
+
     def get_email(self):
         return self.email
 
@@ -81,6 +85,17 @@ def determine_user_type(sender , instance=None , created=False , **kwargs):
 class Student(models.Model):
     user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
 
+    def __str__(self):
+        return 'Student({0})'.format(str(user))
+    
+
 
 class Teacher(models.Model):
     user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Teacher({0})'.format(str(user))
+
+    
+
+    
