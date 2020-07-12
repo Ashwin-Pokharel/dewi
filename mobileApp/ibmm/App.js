@@ -103,6 +103,7 @@ export default App;
  import Routes from './src/Routes';
  
  export class App extends React.Component<{}>{
+   console.log('djkhsfisk')
      render(){
          return(
              <View style = {styles.container}>
