@@ -12,6 +12,8 @@ import React, {Component, Fragment} from "react";
  import SignUpForm from '../components/SignUpForm';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Actions } from 'react-native-router-flux';
+import { NavigationContainer } from '@react-navigation/native';
+
 
  
  export default class SignUp extends React.Component<{}>{

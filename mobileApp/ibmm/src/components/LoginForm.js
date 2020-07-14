@@ -7,68 +7,105 @@ import React, {Component, Fragment} from "react";
         SafeAreaView,
         TextInput,
         TouchableOpacity,
+        Button
  } from 'react-native';
  
  import { createAppContainer } from 'react-navigation';
  import { createStackNavigator } from 'react-navigation-stack'
  import { AsyncStorage } from 'react-native'
  import { Actions } from 'react-native-router-flux';
+ import {StackNavigator} from 'react-navigation';
+ import { NavigationContainer } from '@react-navigation/native';
+ import { useNavigation } from '@react-navigation/native';
+
+ function construc(){
+ return constructor(){
+
+ this.state = {
+  email : '',
+  password : '',
+  token: ''
+}}}
+
+function setEmail(email){
+  state.email += email;
+  console.log(state.email)
+}
+
+function setPass(password){
+  state.password += password;
+}
+
+ function GoToButton({ screenName }) {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity style={styles.button} onPress={() => 
+                {
+                onSubmit()
+                if(goHS()){
+                navigation.navigate(screenName)
+              }
+                else{
+                  alert('its okay you got this :)')
+              }
+                }}>
+                <Text style = {styles.buttonText}> Sign In </Text>
+            </TouchableOpacity>
+
+  );
+}
+
+async function fetcher(password, email){
+  var self = this
+  fetch('http://127.0.0.1:8000/auth/token/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    'password': password,
+    'email': email
+  })})
+  .then((response) => response.json())
+  .then((json) =>{
+    self.setState({
+      token: json.auth_token,
+      });
+    console.log(self.state.token)
+    })
+  .catch((error) => {
+    console.error(error);
+  })
+}
+
+async function onSubmit() { 
+  try{
+    console.log("FUCK")
+    this.fetcher(state.password, state.email)
+    console.log(":(")
+    AsyncStorage.setItem('token', JSON.stringify(state.token).then(val => {
+      console.log(val)
+    }))
+  } 
+  catch(err){
+    console.log(err)
+  }
+}
+
+function goHS() {
+  AsyncStorage.getItem('token').then(val =>{if (val != null)
+    {return true
+    console.log("WORK")}
+    else{
+      false
+    }})}
+
 
 
  export default class LoginForm extends React.Component<{}>{
   constructor(props){
     super(props);
-    this.state = {
-        email : '',
-        password : '',
-        token: ''
-    }
-    this.getData();
-  }
-
-    async fetcher(password, email){
-      var self = this
-      fetch('http://127.0.0.1:8000/auth/token/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'password': password,
-        'email': email
-      })})
-      .then((response) => response.json())
-      .then((json) =>{
-        self.setState({
-          token: json.auth_token,
-          });
-        console.log(self.state.token)
-        })
-      .catch((error) => {
-        console.error(error);
-      })
-  }
-
-    onSubmit = async () => { 
-        try{
-          this.fetcher(this.state.password, this.state.email)
-          await AsyncStorage.setItem('token', this.state.token)
-          await AsyncStorage.setItem('email', this.state.email)
-          await this.goHS()
-        } 
-        catch(err){
-          console.log(err)
-        }
-      }
-
-      async goHS() {
-        if(this.state.token != null || this.state.token != ''){
-          Actions.HP()
-        }
-        else{
-          alert('STUPID!')
-        }
-      }
+  } 
       //goHS = async () => {
           //Actions.HP() 
       //}
@@ -90,43 +127,33 @@ import React, {Component, Fragment} from "react";
         }
       };
 
-
   render(){
       return(
         <View style = {styles.container}>
-            <Text>{this.state.token}</Text>
+            <Text>{state.token}</Text>
             <TextInput style={styles.inputBox} 
                 underlineColorAndroid= 'rgba(0,0,0,0)' 
                 placeholder="Email"
                 placeholderTextColor="#ffffff"
                 autoCapitalize = 'none'
-                onChangeText={email => this.setState({ email})}
-                value = {this.state.email}/>
+                onChangeText={email => setEmail(email)}
+                value = {state.email}/>
             <TextInput style={styles.inputBox} 
                 underlineColorAndroid= 'rgba(0,0,0,0)' 
                 placeholder="Password"
                 secureTextEntry={true}
                 placeholderTextColor="#ffffff"
                 autoCapitalize = 'none'
-                onChangeText={password => this.setState({ password})}
-                value = {this.state.password}
+                onChangeText={password => setPass(password)}
+                value = {state.password}
                 />
-            <TouchableOpacity style={styles.button} 
-                onPress = {
-                  this.onSubmit}
-                  
-                  //set dict values for user and pass
-              //fetch call to puth user and pass and get token
-              //if json.token is undefined then prompt them that the
-                //}
-                >
-                <Text style = {styles.buttonText}> Login </Text>
-            </TouchableOpacity>
+                <GoToButton screenName="HP" />
+            
         </View>
       )
                 }
   }
-
+////await this.onSubmit()
 
   const styles = StyleSheet.create({
     container:{

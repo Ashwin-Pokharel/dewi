@@ -13,6 +13,10 @@ import React, {Component, Fragment} from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
+import {StackNavigator} from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+
 
 
  
@@ -20,11 +24,8 @@ import { AsyncStorage } from 'react-native';
 
  export default class LoginScreen extends React.Component<{}>{
 
-  
-
-
-    signup(){
-      Actions.SU()
+    signup(navigation){
+      navigation.navigate('SU')
     }
 
    render(){
@@ -35,7 +36,7 @@ import { AsyncStorage } from 'react-native';
          <View style = {styles.signupTextCont}>
             <Text style = {styles.signupText}> Don't have an account yet?</Text>
             <TouchableOpacity onPress={
-              this.signup}>
+              this.signup(this.props.navigation)}>
               <Text style = {styles.signupButton}> Sign Up</Text>
               </TouchableOpacity>
          </View>
