@@ -11,16 +11,16 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractBaseUser , PermissionsMixin):
-    email = models.EmailField(unique=True, null=False, help_text='Email Address' , blank=False)
-    first_name = models.CharField(max_length=50, null=False, help_text='First Name' , blank=False)
-    last_name = models.CharField(max_length=50, null=False, help_text='Last Name' , blank=False)
-    phone_number = PhoneNumberField(blank=False, null=False, help_text='Phone Number')
-    is_teacher = models.BooleanField(default=False, null=False)
-    is_school_admin = models.BooleanField(default=False, null=True)
+    email = models.EmailField( unique=True, help_text='Email Address' , blank=False , primary_key=True)
+    first_name = models.CharField(max_length=50, help_text='First Name' , blank=False)
+    last_name = models.CharField(max_length=50, help_text='Last Name' , blank=False)
+    phone_number = PhoneNumberField(blank=False, help_text='Phone Number')
+    is_teacher = models.BooleanField(default=False, blank=False)
+    is_school_admin = models.BooleanField(default=False, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
     last_active = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False , null=False)
+    is_staff = models.BooleanField(default=False , blank=False)
 
     objects = UserManager()
 
@@ -73,28 +73,23 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 @receiver(post_save , sender=settings.AUTH_USER_MODEL)
-def determine_user_type(sender , instance=None , created=False , **kwargs):
+def determine_user_type(sender, instance=None, created=False, **kwargs):
     if created:
-        if instance.get_is_teacher:
+        if instance.is_teacher:
             Teacher.objects.create(user=instance)
         else:
             Student.objects.create(user=instance)
 
 
 class Student(models.Model):
-    user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False , on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Student({0})'.format(str(self.user))
     
 
-
 class Teacher(models.Model):
-    user = models.ForeignKey(User , null=False , blank=False , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , blank=False , on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Teacher({0})'.format(str(self.user))
-
-    
-
-    
