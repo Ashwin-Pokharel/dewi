@@ -12,39 +12,44 @@ import React, {Component, Fragment} from "react";
  import SignUpForm from '../components/SignUpForm';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Actions } from 'react-native-router-flux';
+import {StackNavigator} from 'react-navigation';
+ import { NavigationContainer } from '@react-navigation/native';
+ import { useNavigation } from '@react-navigation/native';
 
 
  
  export default class SignUp extends React.Component<{}>{
 
-    onLogout = async () => { 
+    async onLogout(navigation) { 
         try{
-            this.setState({token: ''})
-            this.setState({email: ''})
-            await AsyncStorage.clear()
-            Actions.LI()
-        }
+            await AsyncStorage.clear()}
         catch(err){
           console.log(err)
         }
+          navigation.navigate('LI')
       }
 
-      async goHS() {
-        if(this.state.token != null || this.state.token != ''){
-          Actions.HP()
-        }
-        else{
-          alert('STUPID!')
-        }
-      }
+      static navigationOptions = {
+        headerLeft : null
+      };
+
+   //async goHS() {
+        //if(this.state.token != null || this.state.token != ''){
+          //Actions.HP()
+        //}
+        //else{
+          //alert('STUPID!')
+        //}
+      //}
+      
 
    render(){
      return(
        <View style = {styles.container}>
          <Text>HIIIIIIII!!!!</Text>
          <TouchableOpacity style={styles.button} 
-                onPress = {
-                  this.onLogout}
+                onPress = { async () =>
+                  {await this.onLogout(this.props.navigation)}}
                 >
                 <Text style = {styles.buttonText}> Logout </Text>
             </TouchableOpacity>

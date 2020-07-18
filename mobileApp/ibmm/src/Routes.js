@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 
-import LoginScreen from './Screens/LoginScreen';
+import LoginForm from './Screens/LoginForm';
 import SignUp from './Screens/SignUp';
 import HomePage from './Screens/HomePage';
 import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {StackNavigator} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 
 
 const Stack = createStackNavigator()
@@ -32,9 +33,10 @@ export default class Routes extends Component<{}> {
             <NavigationContainer>
             <Stack.Navigator initialRouteName="LI">
             {this.checkInit1() ? ( <>
-              <Stack.Screen name="LI" component={LoginScreen}/>
+            <Stack.Screen name="HP" component={HomePage}/>
+              <Stack.Screen name="LI" component={LoginForm}/>
               <Stack.Screen name="SU" component={SignUp} /> 
-              <Stack.Screen name="HP" component={HomePage}/>
+              
               </>
             ) : (
               <Stack.Screen name="HP" component={HomePage} />
