@@ -31,9 +31,9 @@ import React, {Component, Fragment} from "react";
       password : '',
       token: ''}
     this.getData();
-    console.log(this.state.email)
     console.log(this.state.token)
   } 
+
       
       getData = async () => {
         try {
@@ -92,10 +92,9 @@ import React, {Component, Fragment} from "react";
         })
       }
   
-
     goHS(navigation) {
         //AsyncStorage.getItem('token').then(val =>{if (val != null)
-        if(this.state.token != null){
+        if(this.state.token != null || this.state.token != ''){
         console.log("GOIN TRUE")
         navigation.navigate('HP')
       }

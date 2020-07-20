@@ -26,7 +26,6 @@ import {StackNavigator} from 'react-navigation';
         catch(err){
           console.log(err)
         }
-          navigation.navigate('LI')
       }
 
       static navigationOptions = {
