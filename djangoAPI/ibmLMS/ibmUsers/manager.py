@@ -1,5 +1,4 @@
 from django.contrib.auth.base_user import BaseUserManager
-from pylint.checkers.typecheck import _
 
 
 class UserManager(BaseUserManager):
