@@ -34,9 +34,8 @@ export default class Routes extends Component<{}> {
             <Stack.Navigator initialRouteName="LI">
             {this.checkInit1() ? ( <>
             <Stack.Screen name="HP" component={HomePage}/>
-              <Stack.Screen name="LI" component={LoginForm}/>
-              <Stack.Screen name="SU" component={SignUp} /> 
-              
+            <Stack.Screen name="LI" component={LoginForm}/>
+            <Stack.Screen name="SU" component={SignUp} />               
               </>
             ) : (
               <Stack.Screen name="HP" component={HomePage} />
