@@ -55,11 +55,14 @@ class IbmStorage(Storage):
         except Exception as e:
             raise Exception
 
+    def open(self , name ,  mode="rb"):
+        return self._open(name , mode)
+
     def _open(self, name, mode="rb"):
         try:
             new_file = NamedTemporaryFile(delete=False)
             with open(new_file.name , "wb") as data:
-                self.cos.download_obj(Bucket=envconfig("COS_BUCKET_IBM"), Key=name, Fileobj=data)
+                self.cos.download_fileobj(Bucket=envconfig("COS_BUCKET_IBM"), Key=name, Fileobj=data)
             return new_file
         except Exception as e:
             print(Exception , e)
