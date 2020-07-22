@@ -33,14 +33,12 @@ export default class Routes extends Component<{}> {
             <NavigationContainer>
             <Stack.Navigator initialRouteName="LI">
             {this.checkInit1() ? ( <>
-            <Stack.Screen name="HP" component={HomePage} options={{headerShown: false}}/>
-            <Stack.Screen name="LI" component={LoginForm} 
-            options={{headerShown: false}}/>
+            <Stack.Screen name="HP" component={HomePage}/>
+            <Stack.Screen name="LI" component={LoginForm}/>
             <Stack.Screen name="SU" component={SignUp} />               
               </>
             ) : (
-              <Stack.Screen name="HP" component={HomePage} 
-              options={{headerShown: false}}/>
+              <Stack.Screen name="HP" component={HomePage} />
             )}
           </Stack.Navigator>
           </NavigationContainer>
