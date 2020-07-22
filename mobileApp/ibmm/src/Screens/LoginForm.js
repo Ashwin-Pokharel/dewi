@@ -30,8 +30,7 @@ import React, {Component, Fragment} from "react";
       email : '',
       password : '',
       token: ''}
-    this.getData();
-    console.log(this.state.token)
+   this.getData();
   } 
 
       
@@ -59,11 +58,10 @@ import React, {Component, Fragment} from "react";
 
     async onSubmit() { 
         try{
-          console.log("FUCK")
+          console.log(this.state)
           await this.fetcher(this.state.password, this.state.email)
-          console.log(":(")
+          console.log(this.state)
           await AsyncStorage.setItem('token', this.state.token) 
-          
         } 
         catch(err){
           console.log(err)
@@ -72,7 +70,8 @@ import React, {Component, Fragment} from "react";
 
       async fetcher(password, email){
         var self = this
-        fetch('http://127.0.0.1:8000/auth/token/login', {
+        console.log('fetching')
+        await fetch('http://127.0.0.1:8000/auth/token/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -83,18 +82,24 @@ import React, {Component, Fragment} from "react";
         })})
         .then((response) => response.json())
         .then((json) =>{ 
+          if(json.auth_token != undefined || json.auth_token != null){
+          console.log('json setting')
            self.setState({
-            token: json.auth_token,
-            });
-          })
+            token : json.auth_token});
+          }
+          else{
+            alert("I LOVE YOU ITS OKAY")
+          }})
         .catch((error) => {
           console.error(error);
         })
       }
   
-    goHS(navigation) {
-        //AsyncStorage.getItem('token').then(val =>{if (val != null)
-        if(this.state.token != null || this.state.token != ''){
+    async goHS(navigation) {
+        //AsyncStorage.getItem('token').then(val =>
+        //{console.log("TOKEN VAL: " +val)})
+        console.log("state token " + this.state.token)
+        if(this.state.token != null && this.state.token != '' && this.state.token != undefined){
         console.log("GOIN TRUE")
         navigation.navigate('HP')
       }
@@ -131,7 +136,6 @@ import React, {Component, Fragment} from "react";
                 placeholder="Email"
                 placeholderTextColor="#ffffff"
                 autoCapitalize = 'none'
-                ref={(u) => this._username = u}
                 onChangeText={email => this.setState({email})}
                 value = {this.state.email}/>
             <TextInput style={styles.inputBox} 
@@ -146,7 +150,7 @@ import React, {Component, Fragment} from "react";
             <TouchableOpacity style={styles.button} onPress={ async () => 
                 {
                 await this.onSubmit()
-                this.goHS(this.props.navigation)
+                await this.goHS(this.props.navigation)
                 }}>
                 <Text style = {styles.buttonText}> Sign In </Text> 
             </TouchableOpacity>
