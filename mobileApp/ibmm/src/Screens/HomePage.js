@@ -22,16 +22,16 @@ import {StackNavigator} from 'react-navigation';
 
     async onLogout(navigation) { 
         try{
-            await AsyncStorage.clear()}
+            await AsyncStorage.clear();
+            AsyncStorage.getItem('token').then(val =>
+            {console.log("TOKEN VAL: " +val)})
+            navigation.push('LI')
+          }
         catch(err){
           console.log(err)
         }
-          navigation.navigate('LI')
       }
-
-      static navigationOptions = {
-        headerLeft : null
-      };
+      ;
 
    //async goHS() {
         //if(this.state.token != null || this.state.token != ''){
