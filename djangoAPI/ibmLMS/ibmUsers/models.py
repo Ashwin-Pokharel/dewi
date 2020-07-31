@@ -10,17 +10,17 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-class User(AbstractBaseUser , PermissionsMixin):
-    email = models.EmailField( unique=True, help_text='Email Address' , blank=False , primary_key=True)
-    first_name = models.CharField(max_length=50, help_text='First Name' , blank=False)
-    last_name = models.CharField(max_length=50, help_text='Last Name' , blank=False)
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True, help_text='Email Address', blank=False, primary_key=True)
+    first_name = models.CharField(max_length=50, help_text='First Name', blank=False)
+    last_name = models.CharField(max_length=50, help_text='Last Name', blank=False)
     phone_number = PhoneNumberField(blank=False, help_text='Phone Number')
     is_teacher = models.BooleanField(default=False, blank=False)
     is_school_admin = models.BooleanField(default=False, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
     last_active = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False , blank=False)
+    is_staff = models.BooleanField(default=False, blank=False)
 
     objects = UserManager()
 
@@ -33,7 +33,7 @@ class User(AbstractBaseUser , PermissionsMixin):
         verbose_name_plural = 'users'
 
     def __str__(self):
-        return self.first_name + ' '+ self.last_name
+        return self.first_name + ' ' + self.last_name
 
     def get_email(self):
         return self.email
@@ -72,7 +72,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-@receiver(post_save , sender=settings.AUTH_USER_MODEL)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def determine_user_type(sender, instance=None, created=False, **kwargs):
     if created:
         if instance.is_teacher:
@@ -82,14 +82,15 @@ def determine_user_type(sender, instance=None, created=False, **kwargs):
 
 
 class Student(models.Model):
-    user = models.ForeignKey(User, blank=False , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
+    initial_login = models.BooleanField(default=True, blank=True)
 
     def __str__(self):
         return 'Student({0})'.format(str(self.user))
-    
+
 
 class Teacher(models.Model):
-    user = models.ForeignKey(User , blank=False , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Teacher({0})'.format(str(self.user))

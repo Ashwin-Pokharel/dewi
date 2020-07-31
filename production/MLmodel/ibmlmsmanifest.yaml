@@ -1,0 +1,7 @@
+name: ibmlms model
+framework:
+  name: tensorflow
+  version: "1.15"
+ 
+  
+
