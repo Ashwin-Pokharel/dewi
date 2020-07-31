@@ -8,6 +8,8 @@ import secrets
 from jsonfield import JSONField
 from django.db.models.signals import pre_delete, pre_save, post_save
 from django.dispatch.dispatcher import receiver
+from twilio.rest import Client
+from decouple import config as envconfig
 
 assignment_choices = (('T', 'Test'), ('Q', 'Quiz'), ('H', 'Homework'))
 
@@ -113,6 +115,22 @@ def assignment_addition(sender, instance, **kwargs):
         if assign[1]:
             assign[0].save()
         assign[0].assignments.add(instance)
+
+
+@receiver(post_save, sender=Assignment)
+def assignment_notification(sender , instance , **kwargs):
+    client = Client(envconfig('TWILIO_ACCOUNT_SID'), envconfig('TWILIO_AUTH_TOKEN'))
+    class_part = instance.class_part
+    available_date = instance.available_start.strftime("%b/%d/%y %I:%M:%S %p")
+    due_data = instance.available_end.strftime("%b/%d/%y %I:%M:%S %p")
+    message = "New assignment! from: {0}\n\t- Name: {1}\n\t- Available on: {2}\n\t-Due date: {3}  \n Good Luck!! You " \
+              "got this! 😀".format(str(class_part) , instance.name , available_date , due_data)
+    for student in class_part.students.all():
+        phone = str(student.user.phone_number)
+        sent = client.messages.create(
+            body=message,
+            from_='+12027653536',
+            to=phone)
 
 
 @receiver(pre_delete, sender=Documents)

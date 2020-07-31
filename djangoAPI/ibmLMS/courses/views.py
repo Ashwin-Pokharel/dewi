@@ -44,6 +44,23 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def getCredits(request):
+    user = request.user
+    total_credits = 0
+    try:
+        student = Student.objects.get(user=user)
+        classes = Classes.objects.filter(students__exact=student).all()
+        for item in classes:
+            total_credits += item.credit
+        data = {'total_credits': total_credits}
+        return Response(status=200, data=data)
+    except Exception as e:
+        print(e)
+        return return_error_response_dict(500 , "internal server error")
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getAssignments(request):
     try:
         user = request.user
@@ -57,10 +74,10 @@ def getAssignments(request):
         for items in assignment_choices:
             data = data_dict.get(class_id)
             if data.get(items[0]) is None:
-                data[items[0]]= {
+                data[items[0]] = {
                     "weight": weights[items[0]],
                     "assignments": AssignmentSerializer(assignments.assignments.filter(assignment_type=items[0]).all()
-                                                        ,many=True).data
+                                                        , many=True).data
                 }
         return Response(status=200, data=data)
     except KeyError as e:
