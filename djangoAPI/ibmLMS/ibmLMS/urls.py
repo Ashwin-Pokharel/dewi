@@ -18,15 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 import courses.urls
 import ibmUsers.urls
+import communication.urls
 from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='Dew API')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include(ibmUsers.urls) , name='login'),
     url(r'^', include(courses.urls) , name='courses'),
+    path('message/', include(communication.urls) , name='communication'),
     url(r'^endpoints', schema_view),
 
 ]

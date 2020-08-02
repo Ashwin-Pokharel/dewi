@@ -2,23 +2,36 @@ import React, {Component, Fragment} from "react";
  import {
          Platform,
         StyleSheet,
-        Text,
         View,
         SafeAreaView,
-        StatusBar, AsyncStorage
+        StatusBar, AsyncStorage, Button
  } from 'react-native';
-
+ import { Header, Text } from 'react-native-elements';
+import { Left, Right, Icon } from 'native-base';
  import Logo from '../components/Logo';
+ import HomeRoutes from '../HomeRoutes';
  import SignUpForm from '../components/SignUpForm';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Actions } from 'react-native-router-flux';
 import {StackNavigator} from 'react-navigation';
  import { NavigationContainer } from '@react-navigation/native';
  import { useNavigation } from '@react-navigation/native';
+ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
+ const Drawer = createDrawerNavigator();
  
  export default class SignUp extends React.Component<{}>{
+  constructor(props){
+    super(props);
+  }
+
+  /*async router(){
+    await AsyncStorage.getItem('name').then(val =>
+      this.setState({name: val}))
+    await AsyncStorage.getItem('name').then(val =>
+      console.log(val))
+  }*/
 
     async onLogout(navigation) { 
         try{
@@ -31,29 +44,15 @@ import {StackNavigator} from 'react-navigation';
           console.log(err)
         }
       }
-      ;
-
-   //async goHS() {
-        //if(this.state.token != null || this.state.token != ''){
-          //Actions.HP()
-        //}
-        //else{
-          //alert('STUPID!')
-        //}
-      //}
       
 
    render(){
      return(
-       <View style = {styles.container}>
-         <Text>HIIIIIIII!!!!</Text>
-         <TouchableOpacity style={styles.button} 
-                onPress = { async () =>
-                  {await this.onLogout(this.props.navigation)}}
-                >
-                <Text style = {styles.buttonText}> Logout </Text>
-            </TouchableOpacity>
-       </View> 
+       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text h3 > WELCOME </Text>
+      <Button title="Open drawer" onPress={() => this.props.navigation.openDrawer()} />
+      <Button title="Toggle drawer" onPress={() => this.props.navigation.toggleDrawer()} />
+    </View>
      )
    }
  }

@@ -98,6 +98,7 @@ export default App;
         View,
         SafeAreaView,
         StatusBar,
+        AppRegistry
  } from 'react-native';
 
  import Routes from './src/Routes';

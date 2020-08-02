@@ -19,7 +19,7 @@ import React, {Component, Fragment} from "react";
  import { NavigationEvents } from 'react-navigation';
  import { useFocusEffect } from '@react-navigation/native';
  import Logo from '../components/Logo';
-
+ import InitSurvey from '../InitSurvey';
 
 
 
@@ -61,7 +61,7 @@ import React, {Component, Fragment} from "react";
           console.log(this.state)
           await this.fetcher(this.state.password, this.state.email)
           console.log(this.state)
-          await AsyncStorage.setItem('token', this.state.token) 
+          await AsyncStorage.setItem('token', this.state.token)
         } 
         catch(err){
           console.log(err)
@@ -100,8 +100,17 @@ import React, {Component, Fragment} from "react";
         //{console.log("TOKEN VAL: " +val)})
         console.log("state token " + this.state.token)
         if(this.state.token != null && this.state.token != '' && this.state.token != undefined){
-        console.log("GOIN TRUE")
-        navigation.navigate('HP')
+          AsyncStorage.getItem('initForm').then(val =>
+            {if(val){
+              console.log("GOIN TRUE")
+              navigation.push('HR', {screen: 'HOME PAGE'} )
+            }
+             else{
+              navigation.push('IS')
+             }
+
+          
+          })
       }
         else{
           console.log("GOING FALSE 2")
@@ -110,27 +119,14 @@ import React, {Component, Fragment} from "react";
 
 
     signup(navigation){
-      navigation.navigate('SU')
-    }
-
-    
-    /*
-    useFocusEffect(){
-      React.useCallback(() => {
-        console.log('focusinf')
-  
-        return () => {
-          console.log('unfocusing')
-        };
-      }, [])
- }  
-    */
+      console.log('im at the login page')
+      navigation.push('SU')
+    }    
 
   render(){
       return(
         <View style = {styles.container}>
             <Logo/>
-            <Text>{this.state.token}</Text>
             <TextInput style={styles.inputBox} 
                 underlineColorAndroid= 'rgba(0,0,0,0)' 
                 placeholder="Email"
@@ -156,8 +152,8 @@ import React, {Component, Fragment} from "react";
             </TouchableOpacity>
             <View style = {styles.signupTextCont}>
               <Text style = {styles.signupText}> Don't have an account yet?</Text>
-               <TouchableOpacity onPress={ async () =>
-                      await this.signup(this.props.navigation)}>
+               <TouchableOpacity onPress={ () =>
+                     this.signup(this.props.navigation)}>
                   <Text style = {styles.signupButton}> Sign Up
                   </Text>
                 </TouchableOpacity>
@@ -187,7 +183,7 @@ import React, {Component, Fragment} from "react";
     },
     button:{
       width: 300,
-      backgroundColor: '#66bb6a',//#b61826 #26c6da
+      backgroundColor: '#2fbcd5',//#b61826 #26c6da
       borderRadius: 25,
       marginVertical: 10,
       paddingVertical: 12
