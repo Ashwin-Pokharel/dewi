@@ -1,5 +1,17 @@
 #Dewi
 
+REPO HAS BEEN DEPRACTED:     
+
+    django component
+        https://github.com/Ashwin-Pokharel/dewi-django/
+
+    mobile app component
+        https://github.com/shaygyawali/Dewi-Mobile
+
+    machine learning component
+        https://github.com/Ashwin-Pokharel/dewi-ML
+
+
 A learning management system designed to help students
 
 - This application consists of 3 main services
